@@ -1,0 +1,356 @@
+/*------------------------------------*\
+  全局设定
+\*------------------------------------*/
+
+html, body {
+    display: flex;
+    width: 100%;
+    user-select: none;
+    vertical-align: baseline;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: 'Roboto', 'Noto Sans SC', sans-serif;
+    text-rendering: optimizeLegibility;
+    image-rendering: -webkit-optimize-contrast;
+    -webkit-font-smoothing: antialiased;
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    -webkit-user-drag: none;
+}
+
+body {
+    --increment: 64px;
+    --keyline: 24px;
+}
+
+::selection {
+    color: var(--theme-base-color);
+    background: var(--states-base-color);
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+@font-face {
+    font-family: 'Material Like Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url(../resources/Material-Like-Icon.woff) format('woff');
+}
+
+.material-icons {
+    font-family: 'Material Like Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+/*------------------------------------*\
+  主题
+\*------------------------------------*/
+
+.button {
+    --states-color: var(--states-base-color);
+    --hover-alpha: 0.04;
+    --focus-alpha: 0.12;
+    --ripple-foreground-alpha: 0.16;
+}
+
+.projects picture {
+    --states-overlay-level: 1;
+    --states-color: #000000;
+    --hover-alpha: 0.12;
+    --ripple-foreground-alpha: 0.24;
+}
+
+#Shadowsocks {
+    --states-color: #ffffff;
+}
+
+/*------------------------------------*\
+  主信息
+\*------------------------------------*/
+
+.introduction {
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: var(--increment);
+    align-items: center;
+    flex-wrap: wrap;
+    flex-grow: 1;
+    text-align: center;
+    min-width: 384px;
+    align-self: flex-start;
+    position: sticky;
+    top: 0;
+}
+
+.logo {
+    height: 128px;
+    margin-top: 64px;
+}
+
+.logo path {
+    fill: var(--primary-text-color);
+}
+
+.introduction h4 {
+    margin-top: 33px;
+    user-select: text;
+    font-family: 'Roboto Mono', 'Noto Sans SC', monospace;
+    font-weight: 500;
+}
+
+.introduction>p {
+    margin: 24px 0 30px 0;
+    user-select: text;
+    line-height: 30px;
+}
+
+.introduction span {
+    margin-top: 35px;
+    color: var(--primary-text-color);
+}
+
+.links {
+    display: grid;
+    margin-top: var(--keyline);
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    color: var(--primary-text-color);
+}
+
+/*------------------------------------*\
+  方案成品
+\*------------------------------------*/
+
+.projects {
+    z-index: 8;
+    display: flex;
+    width: 100%;
+    max-width: 1280px;
+    flex-direction: column;
+    margin-right: 64px;
+}
+
+.projects picture {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+    cursor: pointer;
+}
+
+.projects picture:first-child {
+    margin-top: 8px;
+}
+
+.projects picture:last-child {
+    margin-bottom: 40px;
+}
+
+.projects picture img {
+    box-sizing: border-box;
+    width: 100%;
+    height: auto;
+    vertical-align: top;
+}
+
+#Ice_Box {
+    background-color: #00E5FF;
+}
+
+#Shadowsocks {
+    background-color: #90A4AE;
+}
+
+#IThome {
+    background-color: #ffffff;
+}
+
+#IThome::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 1px rgba(0, 0, 0, 0.06) solid;
+}
+
+/*------------------------------------*\
+  作品详情
+\*------------------------------------*/
+
+.project-page {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    z-index: 48;
+    display: flex;
+    background-color: transparent;
+    visibility: hidden;
+    pointer-events: none;
+    transition-property: background-color;
+    transition-duration: 420ms;
+    transition-timing-function: var(--standard-curve);
+}
+
+.project-page[class~=on] {
+    visibility: visible;
+    background-color: rgba(51, 51, 51, 0.4);
+    pointer-events: auto;
+}
+
+.project-surface-tb {
+    width: 100%;
+    height: 100%;
+}
+
+.project-page[class~=on] .project-surface-tb {
+    animation-name: projectTBReveal;
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.3, 0.0, 0.1, 1);
+}
+
+@keyframes projectTBReveal {
+    0% {
+        clip-path: inset(var(--origin-top) 0px calc(100vh - var(--origin-top)) 0px);
+    }
+    100% {
+        clip-path: inset(0px 0px 0px 0px);
+    }
+}
+
+.project-content {
+    width: 100vw;
+    height: 100vh;
+}
+
+.project-page[class~=on] .project-content {
+    animation-name: projectLRReveal, projectContentShow, projectContentVisibility;
+    animation-duration: 420ms;
+    animation-timing-function: cubic-bezier(0.0, 0.0, 0.4, 1), cubic-bezier(0.0, 0.0, 0.2, 1), linear;
+}
+
+@keyframes projectLRReveal {
+    0% {
+        clip-path: inset(0px calc(100vw - var(--origin-left)) 0px var(--origin-left));
+    }
+    40% {
+        clip-path: inset(0px 0px 0px 0px);
+    }
+    100% {
+        clip-path: inset(0px 0px 0px 0px);
+    }
+}
+
+@keyframes projectContentShow {
+    0% {
+        transform: translateY(calc(8px + var(--origin-top) / 7));
+        opacity: 0.5;
+    }
+    25% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+
+/*------------------------------------*\
+  跨屏幕
+\*------------------------------------*/
+
+@media screen and (max-width:960px) {
+    body {
+        flex-direction: column;
+        align-items: center;
+    }
+    .introduction {
+        align-self: unset;
+        min-width: unset;
+        position: relative;
+    }
+    .projects {
+        max-width: 768px;
+        margin: 0;
+    }
+}
+
+@media screen and (max-width:768px) {
+    .projects {
+        max-width: none;
+    }
+}
+
+@media screen and (max-width:480px) {
+    body {
+        --increment: 56px;
+        --keyline: 16px;
+    }
+    .introduction h1 {
+        margin-top: 20px;
+    }
+    .introduction>p {
+        margin: 16px 0 14px 0;
+    }
+    .logo {
+        margin-top: 32px;
+        height: 88px;
+    }
+    .links {
+        display: grid;
+        grid-row-gap: unset;
+    }
+    .projects picture:first-child {
+        margin-top: unset;
+    }
+}
+
+/*------------------------------------*\
+  主题
+\*------------------------------------*/
+
+@media (prefers-color-scheme: light) {
+    html, body, .project-content {
+        background-color: #f5f5f5;
+    }
+    .introduction>p {
+        color: rgba(0, 0, 0, 0.7);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    html, body, .project-content {
+        background-color: #121212;
+    }
+    .introduction>p {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes projectContentVisibility {
+        0% {
+            background-color: #212121;
+        }
+        25% {
+            background-color: #212121;
+        }
+        100% {
+            background-color: #121212;
+        }
+    }
+}
