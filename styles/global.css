@@ -2,6 +2,26 @@
   全局设定
 \*------------------------------------*/
 
+:root {
+    --standard-curve: cubic-bezier(0.4, 0.0, 0.2, 1);
+    --deceleration-curve: cubic-bezier(0.0, 0.0, 0.2, 1);
+    --acceleration-curve: cubic-bezier(0.4, 0.0, 1, 1);
+    --sharp-curve: cubic-bezier(0.4, 0.0, 0.6, 1);
+    --states-overlay-level: unset;
+    --hover-parameter: 0;
+    --focus-parameter: 0;
+    --ripple-background-parameter: 0;
+    --increment: 64px;
+    --keyline: 24px;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    outline: none;
+}
+
 html, body {
     display: flex;
     width: 100%;
@@ -16,13 +36,28 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-img {
-    -webkit-user-drag: none;
+button {
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    font-family: inherit;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+    text-transform: uppercase;
+    display: inline-flex;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
 }
 
-body {
-    --increment: 64px;
-    --keyline: 24px;
+h1, h2, h3, h4, h5, h6, p {
+    color: var(--primary-text-color);
+}
+
+img {
+    -webkit-user-drag: none;
+    pointer-events: none;
 }
 
 ::selection {
@@ -30,38 +65,68 @@ body {
     background: var(--states-base-color);
 }
 
-::-webkit-scrollbar {
-    display: none;
+/*------------------------------------*\
+  按钮
+\*------------------------------------*/
+
+.icon-button {
+    padding: 12px;
+    margin: 0;
 }
 
-@font-face {
-    font-family: 'Material Like Icons';
-    font-style: normal;
-    font-weight: 400;
-    src: url(../resources/Material-Like-Icon.woff) format('woff');
+.icon {
+    width: 24px;
+    height: 24px;
 }
 
-.material-icons {
-    font-family: 'Material Like Icons';
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    font-feature-settings: 'liga';
-    -webkit-font-smoothing: antialiased;
+.icon path {
+    fill: currentColor;
 }
 
 /*------------------------------------*\
-  主题
+  状态
 \*------------------------------------*/
 
-.button {
+button::before, picture::before {
+    content: "";
+    z-index: var(--states-overlay-level);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    pointer-events: none;
+    background-color: var(--states-color);
+    opacity: calc(var(--hover-alpha) * var(--hover-parameter) + var(--focus-alpha) * var(--focus-parameter) + var(--hover-alpha) * var(--ripple-background-parameter));
+    transition-property: opacity;
+    transition-duration: 195ms;
+    transition-timing-function: linear;
+}
+
+.unbounded::before {
+    width: calc(100% + 6px);
+    height: calc(100% + 6px);
+    border-radius: 50%;
+}
+
+*:hover::before, *:focus::before {
+    transition-duration: 225ms;
+}
+
+@media (hover: hover) {
+    button:hover, picture:hover {
+        --hover-parameter: 1;
+    }
+}
+
+*:focus-visible {
+    --focus-parameter: 1;
+}
+
+.pressed {
+    --ripple-background-parameter: 1;
+}
+
+button {
     --states-color: var(--states-base-color);
     --hover-alpha: 0.04;
     --focus-alpha: 0.12;
@@ -72,6 +137,7 @@ body {
     --states-overlay-level: 1;
     --states-color: #000000;
     --hover-alpha: 0.12;
+    --focus-alpha: 0.36;
     --ripple-foreground-alpha: 0.24;
 }
 
@@ -80,11 +146,130 @@ body {
 }
 
 /*------------------------------------*\
+  涟漪
+\*------------------------------------*/
+
+.ripples {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: inherit;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.unbounded>.ripples {
+    overflow: visible;
+}
+
+.ripples .foreground {
+    position: absolute;
+    width: min(var(--diameter), 700px);
+    height: min(var(--diameter), 700px);
+    background-color: var(--states-color);
+    border-radius: 50%;
+}
+
+.ripples .foreground {
+    animation-name: rippleForegroundFadeOut;
+    animation-duration: 400ms;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+}
+
+@keyframes rippleForegroundFadeOut {
+    0% {
+        opacity: var(--ripple-foreground-alpha);
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+/*------------------------------------*\
+  字体排印
+\*------------------------------------*/
+
+h1, .display4 {
+    font-size: 112px;
+    line-height: 112px;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+}
+
+h2, .display3 {
+    font-size: 56px;
+    line-height: 52px;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+}
+
+h3, .display2 {
+    font-size: 45px;
+    line-height: 45px;
+    font-weight: 400;
+    letter-spacing: 0em;
+}
+
+h4, .display1 {
+    font-size: 34px;
+    line-height: 30px;
+    font-weight: 400;
+    letter-spacing: 0em;
+}
+
+h5, .headline {
+    font-size: 24px;
+    line-height: 26px;
+    font-weight: 400;
+    letter-spacing: 0em;
+}
+
+h6, .title {
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+
+.subheading {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+.body2 {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+.body1 {
+    font-size: 14px;
+    line-height: 18px;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+}
+
+.caption {
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+}
+
+/*------------------------------------*\
   主信息
 \*------------------------------------*/
 
 .introduction {
-    z-index: 2;
     display: flex;
     flex-direction: column;
     margin-bottom: var(--increment);
@@ -110,7 +295,7 @@ body {
 .introduction h4 {
     margin-top: 33px;
     user-select: text;
-    font-family: 'Roboto Mono', 'Noto Sans SC', monospace;
+    font-family: 'Noto Sans SC', monospace;
     font-weight: 500;
 }
 
@@ -121,7 +306,7 @@ body {
 }
 
 .introduction span {
-    margin-top: 35px;
+    margin-top: 51px;
     color: var(--primary-text-color);
 }
 
@@ -129,7 +314,8 @@ body {
     display: grid;
     margin-top: var(--keyline);
     grid-template-columns: 1fr 1fr 1fr;
-    gap: 16px;
+    row-gap: var(--keyline);
+    column-gap: 24px;
     color: var(--primary-text-color);
 }
 
@@ -138,7 +324,6 @@ body {
 \*------------------------------------*/
 
 .projects {
-    z-index: 8;
     display: flex;
     width: 100%;
     max-width: 1280px;
@@ -146,22 +331,22 @@ body {
     margin-right: 64px;
 }
 
-.projects picture {
+picture {
     position: relative;
     width: 100%;
     margin-bottom: 8px;
     cursor: pointer;
 }
 
-.projects picture:first-child {
+picture:first-child {
     margin-top: 8px;
 }
 
-.projects picture:last-child {
+picture:last-child {
     margin-bottom: 40px;
 }
 
-.projects picture img {
+picture img {
     box-sizing: border-box;
     width: 100%;
     height: auto;
@@ -178,16 +363,7 @@ body {
 
 #IThome {
     background-color: #ffffff;
-}
-
-#IThome::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: 1px rgba(0, 0, 0, 0.06) solid;
+    outline: 1px rgba(0, 0, 0, 0.06) solid;
 }
 
 /*------------------------------------*\
@@ -195,10 +371,10 @@ body {
 \*------------------------------------*/
 
 .project-page {
+    z-index: 24;
     position: fixed;
     width: 100vw;
     height: 100vh;
-    z-index: 48;
     display: flex;
     background-color: transparent;
     visibility: hidden;
@@ -210,66 +386,21 @@ body {
 
 .project-page[class~=on] {
     visibility: visible;
-    background-color: rgba(51, 51, 51, 0.4);
     pointer-events: auto;
-}
-
-.project-surface-tb {
-    width: 100%;
-    height: 100%;
-}
-
-.project-page[class~=on] .project-surface-tb {
-    animation-name: projectTBReveal;
-    animation-duration: 420ms;
-    animation-timing-function: cubic-bezier(0.3, 0.0, 0.1, 1);
-}
-
-@keyframes projectTBReveal {
-    0% {
-        clip-path: inset(var(--origin-top) 0px calc(100vh - var(--origin-top)) 0px);
-    }
-    100% {
-        clip-path: inset(0px 0px 0px 0px);
-    }
 }
 
 .project-content {
     width: 100vw;
     height: 100vh;
+    display: flex;
 }
 
-.project-page[class~=on] .project-content {
-    animation-name: projectLRReveal, projectContentShow, projectContentVisibility;
-    animation-duration: 420ms;
-    animation-timing-function: cubic-bezier(0.0, 0.0, 0.4, 1), cubic-bezier(0.0, 0.0, 0.2, 1), linear;
+.project-content::before {
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-color: var(--theme-base-color);
 }
-
-@keyframes projectLRReveal {
-    0% {
-        clip-path: inset(0px calc(100vw - var(--origin-left)) 0px var(--origin-left));
-    }
-    40% {
-        clip-path: inset(0px 0px 0px 0px);
-    }
-    100% {
-        clip-path: inset(0px 0px 0px 0px);
-    }
-}
-
-@keyframes projectContentShow {
-    0% {
-        transform: translateY(calc(8px + var(--origin-top) / 7));
-        opacity: 0.5;
-    }
-    25% {
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(0px);
-    }
-}
-
 
 /*------------------------------------*\
   跨屏幕
@@ -312,11 +443,7 @@ body {
         margin-top: 32px;
         height: 88px;
     }
-    .links {
-        display: grid;
-        grid-row-gap: unset;
-    }
-    .projects picture:first-child {
+    picture:first-child {
         margin-top: unset;
     }
 }
@@ -326,31 +453,47 @@ body {
 \*------------------------------------*/
 
 @media (prefers-color-scheme: light) {
-    html, body, .project-content {
+    :root {
+        --theme-base-color: #ffffff;
+        --states-base-color: #000000;
+        --surface-background-color: #fafafa;
+        --primary-text-color: rgba(0, 0, 0, 0.87);
+        --secondary-text-color: rgba(0, 0, 0, 0.54);
+        --hint-text-color: rgba(0, 0, 0, 0.38);
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --theme-base-color: #000000;
+        --states-base-color: #ffffff;
+        --surface-background-color: #212121;
+        --primary-text-color: rgba(255, 255, 255, 1);
+        --secondary-text-color: rgba(255, 255, 255, 0.7);
+        --hint-text-color: rgba(255, 255, 255, 0.5);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    html, body {
         background-color: #f5f5f5;
     }
     .introduction>p {
         color: rgba(0, 0, 0, 0.7);
     }
+    .project-page[class~=on] {
+        background-color: rgba(51, 51, 51, 0.4);
+    }
 }
 
 @media (prefers-color-scheme: dark) {
-    html, body, .project-content {
+    html, body {
         background-color: #121212;
     }
     .introduction>p {
         color: rgba(255, 255, 255, 0.7);
     }
-
-    @keyframes projectContentVisibility {
-        0% {
-            background-color: #212121;
-        }
-        25% {
-            background-color: #212121;
-        }
-        100% {
-            background-color: #121212;
-        }
+    .project-page[class~=on] {
+        background-color: rgba(255, 255, 255, 0.08);
     }
 }
