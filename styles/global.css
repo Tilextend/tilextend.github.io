@@ -7,7 +7,6 @@
     --deceleration-curve: cubic-bezier(0.0, 0.0, 0.2, 1);
     --acceleration-curve: cubic-bezier(0.4, 0.0, 1, 1);
     --sharp-curve: cubic-bezier(0.4, 0.0, 0.6, 1);
-    --states-overlay-level: unset;
     --hover-parameter: 0;
     --focus-parameter: 0;
     --ripple-background-parameter: 0;
@@ -22,7 +21,7 @@
     outline: none;
 }
 
-html, body {
+body {
     display: flex;
     width: 100%;
     user-select: none;
@@ -34,21 +33,6 @@ html, body {
     image-rendering: -webkit-optimize-contrast;
     -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
-}
-
-button {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    text-decoration: none;
-    color: inherit;
-    white-space: nowrap;
-    text-transform: uppercase;
-    display: inline-flex;
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
 }
 
 h1, h2, h3, h4, h5, h6, p {
@@ -69,9 +53,15 @@ img {
   按钮
 \*------------------------------------*/
 
-.icon-button {
+a {
+    position: relative;
+    display: flex;
     padding: 12px;
     margin: 0;
+    color: inherit;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
 }
 
 .icon {
@@ -87,9 +77,8 @@ img {
   状态
 \*------------------------------------*/
 
-button::before, picture::before {
+.ripples::before {
     content: "";
-    z-index: var(--states-overlay-level);
     position: absolute;
     width: 100%;
     height: 100%;
@@ -102,18 +91,18 @@ button::before, picture::before {
     transition-timing-function: linear;
 }
 
-.unbounded::before {
+.unbounded .ripples::before {
     width: calc(100% + 6px);
     height: calc(100% + 6px);
     border-radius: 50%;
 }
 
-*:hover::before, *:focus::before {
+*:hover .ripples::before, *:focus .ripples::before {
     transition-duration: 225ms;
 }
 
 @media (hover: hover) {
-    button:hover, picture:hover {
+    a:hover, picture:hover {
         --hover-parameter: 1;
     }
 }
@@ -126,7 +115,7 @@ button::before, picture::before {
     --ripple-background-parameter: 1;
 }
 
-button {
+a {
     --states-color: var(--states-base-color);
     --hover-alpha: 0.04;
     --focus-alpha: 0.12;
@@ -134,7 +123,6 @@ button {
 }
 
 .projects picture {
-    --states-overlay-level: 1;
     --states-color: #000000;
     --hover-alpha: 0.12;
     --focus-alpha: 0.36;
@@ -195,74 +183,18 @@ button {
   字体排印
 \*------------------------------------*/
 
-h1, .display4 {
-    font-size: 112px;
-    line-height: 112px;
-    font-weight: 300;
-    letter-spacing: -0.02em;
-}
-
-h2, .display3 {
-    font-size: 56px;
-    line-height: 52px;
-    font-weight: 400;
-    letter-spacing: -0.01em;
-}
-
-h3, .display2 {
-    font-size: 45px;
-    line-height: 45px;
-    font-weight: 400;
-    letter-spacing: 0em;
-}
-
-h4, .display1 {
+h1{
     font-size: 34px;
     line-height: 30px;
     font-weight: 400;
     letter-spacing: 0em;
 }
 
-h5, .headline {
-    font-size: 24px;
-    line-height: 26px;
-    font-weight: 400;
-    letter-spacing: 0em;
-}
-
-h6, .title {
-    font-size: 20px;
-    line-height: 20px;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-}
-
-.subheading {
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-}
-
-.body2 {
+h2 {
     font-size: 14px;
     line-height: 18px;
     font-weight: 500;
     letter-spacing: 0.02em;
-}
-
-.body1 {
-    font-size: 14px;
-    line-height: 18px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-}
-
-.caption {
-    font-size: 12px;
-    line-height: 18px;
-    font-weight: 400;
-    letter-spacing: 0.04em;
 }
 
 /*------------------------------------*\
@@ -292,7 +224,7 @@ h6, .title {
     fill: var(--primary-text-color);
 }
 
-.introduction h4 {
+h1 {
     margin-top: 33px;
     user-select: text;
     font-family: 'Noto Sans SC', monospace;
@@ -305,7 +237,7 @@ h6, .title {
     line-height: 30px;
 }
 
-.introduction span {
+h2 {
     margin-top: 51px;
     color: var(--primary-text-color);
 }
@@ -475,7 +407,7 @@ picture img {
 }
 
 @media (prefers-color-scheme: light) {
-    html, body {
+    body {
         background-color: #f5f5f5;
     }
     .introduction>p {
@@ -487,7 +419,7 @@ picture img {
 }
 
 @media (prefers-color-scheme: dark) {
-    html, body {
+    body {
         background-color: #121212;
     }
     .introduction>p {

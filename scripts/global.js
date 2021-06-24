@@ -1,4 +1,4 @@
-document.querySelectorAll('.projects picture, button').forEach((element) => {
+document.querySelectorAll('picture, a').forEach((element) => {
     let div = document.createElement('div');
     div.className = 'ripples';
     element.appendChild(div);
@@ -8,7 +8,7 @@ let rippleTouchCalled = false;
 let rippleKeyboardCalled = false;
 let rippleTapTimer;
 
-document.querySelectorAll('.projects picture, button').forEach((element) => {
+document.querySelectorAll('picture, a').forEach((element) => {
     element.addEventListener('touchstart', (event) => {
         rippleTouchCalled = true;
         rippleTapTimer = setTimeout(() => {
@@ -118,6 +118,9 @@ document.querySelectorAll('.projects picture').forEach((element) => {
             touchCalled = false;
             return;
         }
+        if (event.button !== 0) {
+            return;
+        }
         projectPageEnter(element, event);
     });
     element.addEventListener('keyup', (event) => {
@@ -141,6 +144,9 @@ function projectPageEnter(element, event) {
         revealOriginY = event.changedTouches[0].clientY;
     }
     if (event.type == "mouseup") {
+        if (event.button !== 0) {
+            return;
+        }
         revealOriginX = event.clientX;
         revealOriginY = event.clientY;
     }
